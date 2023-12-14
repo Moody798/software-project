@@ -251,19 +251,22 @@ function handlePrivateBackendApi(app) {
         values(${user.userId});`
       );
       for (i = 0; i < cart.rows.length; i++) {
-        let products = await db.raw(`SELECT * FROM "projectSE"."Product"
+        let product = await db.raw(`SELECT * FROM "projectSE"."Product"
       WHERE "id"=${cart.rows[i].productId}`);
-        if (products.rows[0].quantity >= cart.rows[i].quantity) {
-          await db.raw(`update "projectSE"."Product"
-        SET quantity=${products.rows[0].quantity - cart.rows[i].quantity}
-      WHERE "id"=${cart.rows[i].productId}`);
-          await db.raw(`DELETE FROM "projectSE"."Cart"
-      WHERE "productId"=${cart.rows[i].productId};`);
-        } else {
+        if (product.rows[0].quantity < cart.rows[i].quantity) {
           return res
             .status(400)
-            .send(`unsuccessfully purchase ${products.rows[0].name} \n`);
+            .send(`unsuccessfully purchase ${product.rows[0].name}`);
         }
+      }
+      for (i = 0; i < cart.rows.length; i++) {
+        let product = await db.raw(`SELECT * FROM "projectSE"."Product"
+      WHERE "id"=${cart.rows[i].productId}`);
+        await db.raw(`update "projectSE"."Product"
+        SET quantity=${product.rows[0].quantity - cart.rows[i].quantity}
+      WHERE "id"=${cart.rows[i].productId}`);
+        await db.raw(`DELETE FROM "projectSE"."Cart"
+      WHERE "productId"=${cart.rows[i].productId};`);
       }
       return res.status(200).send("successfully order");
     } catch (e) {
