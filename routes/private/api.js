@@ -145,6 +145,11 @@ function handlePrivateBackendApi(app) {
       if (Count.rows[0].count < 1) {
         return res.status(400).send("product not available");
       }
+      let countCart = await db.raw(`SELECT COUNT(*) FROM "projectSE"."Cart"
+      WHERE "productId"=${productId} and "userId"=${userId}`);
+      if(countCart.rows[0].count > 0){
+        return res.status(400).send("this product is already in your cart");
+      }
       await db.raw(
         `insert into "projectSE"."Cart"("productId",quantity,"userId") 
         values(${productId}, ${quantity}, ${userId});`
@@ -246,10 +251,6 @@ function handlePrivateBackendApi(app) {
       if (Count.rows[0].count < 1) {
         return res.status(400).send("cart not available");
       }
-      await db.raw(
-        `insert into "projectSE"."Order"("userId") 
-        values(${user.userId});`
-      );
       for (i = 0; i < cart.rows.length; i++) {
         let product = await db.raw(`SELECT * FROM "projectSE"."Product"
       WHERE "id"=${cart.rows[i].productId}`);
@@ -259,15 +260,26 @@ function handlePrivateBackendApi(app) {
             .send(`unsuccessfully purchase ${product.rows[0].name}`);
         }
       }
+      await db.raw(
+        `insert into "projectSE"."Order"("userId") 
+        values(${user.userId});`
+      );
+      let order = await db.raw(`SELECT * FROM "projectSE"."Order"
+      WHERE "userId"=${user.userId} ORDER BY id DESC`);
+      console.log(order);
       for (i = 0; i < cart.rows.length; i++) {
         let product = await db.raw(`SELECT * FROM "projectSE"."Product"
       WHERE "id"=${cart.rows[i].productId}`);
         await db.raw(`update "projectSE"."Product"
         SET quantity=${product.rows[0].quantity - cart.rows[i].quantity}
       WHERE "id"=${cart.rows[i].productId}`);
-        await db.raw(`DELETE FROM "projectSE"."Cart"
-      WHERE "productId"=${cart.rows[i].productId};`);
+      await db.raw(
+        `insert into "projectSE"."ProductOrder"("orderID","productID",quantity) 
+        values(${order.rows[0].id},${cart.rows[i].productId},${cart.rows[i].quantity});`
+      );
       }
+      await db.raw(`DELETE FROM "projectSE"."Cart"
+      WHERE "userId"=${user.userId};`);
       return res.status(200).send("successfully order");
     } catch (e) {
       console.log(e.message);

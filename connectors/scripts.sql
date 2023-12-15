@@ -75,3 +75,17 @@ create table if not exists "projectSE"."ProductOrder"
 );
 
 
+-- added in mail
+
+drop table if exists "projectSE"."ProductOrder";
+create table if not exists "projectSE"."ProductOrder"
+(
+    "orderID" integer not null,
+    "productID" integer not null,
+    "quantity" integer not null default 1,
+    foreign key("orderID") references "projectSE"."Order"(id),
+    foreign key("productID") references "projectSE"."Product"(id),
+    primary key("orderID" , "productID")
+
+);
+
