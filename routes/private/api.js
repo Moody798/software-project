@@ -10,16 +10,17 @@ function handlePrivateBackendApi(app) {
   //
   app.post("/api/v1/product/new", async (req, res) => {
     try {
+      console.log("req",req.body);
       let user = await getUser(req);
       let ownerId = user.userId;
       if (user.role !== "admin") {
         return res.status(400).send("not an admin");
       }
-      let { name, quantity, category, description } = req.body;
+      let { name, quantity, rating, category, price, description } = req.body;
 
       await db.raw(
-        `insert into "projectSE"."Product"(name,quantity,category,description,"ownerId") 
-        values('${name}', ${quantity}, '${category}', '${description}', ${ownerId});`
+        `insert into "projectSE"."Product"(name,quantity,category,description,"ownerId",price,rating) 
+        values('${name}', ${quantity}, '${category}', '${description}', ${ownerId},${price},${rating});`
       );
       return res.status(200).send("product created successfully");
     } catch (e) {
@@ -27,40 +28,40 @@ function handlePrivateBackendApi(app) {
       return res.status(400).send("Could not add product");
     }
   });
-  app.get("/api/v1/product/view", async (req, res) => {
-    try {
-      let user = await getUser(req);
-      if (user.role !== "admin") {
-        return res.status(400).send("not an admin");
-      }
-      const products = await db.raw(`SELECT * FROM "projectSE"."Product"
-      WHERE "ownerId"=${user.userId} and hidden=false
-      ORDER BY id ASC `);
-      return res.status(200).send(products.rows);
-    } catch (e) {
-      console.log(e.message);
-      return res.status(400).send("Could not view product");
-    }
-  });
-  app.get("/api/v1/product/view/:productId", async (req, res) => {
-    try {
-      let user = await getUser(req);
-      if (user.role !== "admin") {
-        return res.status(400).send("not an admin");
-      }
-      const product = await db.raw(`SELECT * FROM "projectSE"."Product"
-      WHERE "id"=${req.params.productId}`);
-      let Count = await db.raw(`SELECT COUNT(*) FROM "projectSE"."Product"
-      WHERE "id"=${req.params.productId}`);
-      if (Count.rows[0].count < 1) {
-        return res.status(400).send("product not available");
-      }
-      return res.status(200).send(product.rows);
-    } catch (e) {
-      console.log(e.message);
-      return res.status(400).send("product not available");
-    }
-  });
+  // app.get("/api/v1/product/view", async (req, res) => {
+  //   try {
+  //     let user = await getUser(req);
+  //     if (user.role !== "admin") {
+  //       return res.status(400).send("not an admin");
+  //     }
+  //     const products = await db.raw(`SELECT * FROM "projectSE"."Product"
+  //     WHERE "ownerId"=${user.userId} and hidden=false
+  //     ORDER BY id ASC `);
+  //     return res.status(200).send(products.rows);
+  //   } catch (e) {
+  //     console.log(e.message);
+  //     return res.status(400).send("Could not view product");
+  //   }
+  // });
+  // app.get("/api/v1/product/view/:productId", async (req, res) => {
+  //   try {
+  //     let user = await getUser(req);
+  //     if (user.role !== "admin") {
+  //       return res.status(400).send("not an admin");
+  //     }
+  //     const product = await db.raw(`SELECT * FROM "projectSE"."Product"
+  //     WHERE "id"=${req.params.productId}`);
+  //     let Count = await db.raw(`SELECT COUNT(*) FROM "projectSE"."Product"
+  //     WHERE "id"=${req.params.productId}`);
+  //     if (Count.rows[0].count < 1) {
+  //       return res.status(400).send("product not available");
+  //     }
+  //     return res.status(200).send(product.rows);
+  //   } catch (e) {
+  //     console.log(e.message);
+  //     return res.status(400).send("product not available");
+  //   }
+  // });
   app.put("/api/v1/product/edit/:productId", async (req, res) => {
     try {
       let user = await getUser(req);
@@ -79,9 +80,9 @@ function handlePrivateBackendApi(app) {
           .status(400)
           .send("you can not edit this product as you are not the owner");
       }
-      let { name, quantity, category, description } = req.body;
+      let { name,quantity,rating,price,category,description} = req.body;
       await db.raw(`update "projectSE"."Product"
-      SET name='${name}', quantity=${quantity}, category='${category}', description='${description}'WHERE "id"=${req.params.productId}`);
+      SET name='${name}', quantity=${quantity},rating=${rating},price=${price}, category='${category}' ,description='${description}'WHERE "id"=${req.params.productId}`);
       return res.status(200).send("product updated successfully");
     } catch (e) {
       console.log(e.message);
@@ -147,7 +148,7 @@ function handlePrivateBackendApi(app) {
       }
       let countCart = await db.raw(`SELECT COUNT(*) FROM "projectSE"."Cart"
       WHERE "productId"=${productId} and "userId"=${userId}`);
-      if(countCart.rows[0].count > 0){
+      if (countCart.rows[0].count > 0) {
         return res.status(400).send("this product is already in your cart");
       }
       await db.raw(
@@ -273,10 +274,10 @@ function handlePrivateBackendApi(app) {
         await db.raw(`update "projectSE"."Product"
         SET quantity=${product.rows[0].quantity - cart.rows[i].quantity}
       WHERE "id"=${cart.rows[i].productId}`);
-      await db.raw(
-        `insert into "projectSE"."ProductOrder"("orderID","productID",quantity) 
+        await db.raw(
+          `insert into "projectSE"."ProductOrder"("orderID","productID",quantity) 
         values(${order.rows[0].id},${cart.rows[i].productId},${cart.rows[i].quantity});`
-      );
+        );
       }
       await db.raw(`DELETE FROM "projectSE"."Cart"
       WHERE "userId"=${user.userId};`);

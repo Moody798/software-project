@@ -88,4 +88,7 @@ create table if not exists "projectSE"."ProductOrder"
     primary key("orderID" , "productID")
 
 );
-
+ALTER TABLE "projectSE"."Product"
+add column "price" integer default 250;
+update "projectSE"."Product"
+set "price" = 250;

@@ -1,0 +1,157 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/src/view.js" type="text/javascript"></script>
+  </head>
+  <div>
+    <nav
+      class="navbar navbar-inverse"
+      style="padding-left:130px;position: relative;"
+    >
+      <ul
+        class="nav navbar-nav"
+        style="position: absolute;
+    left: 130;"
+      >
+        <li><a href="/dashboard">Home</a></li>
+        <li class="active"><a href="/product">Product</a></li>
+        <li><a href="/add">Add</a></li>
+      </ul>
+      <ul
+        class="nav navbar-nav"
+        style="position: absolute;
+    right: 130px;"
+      >
+        <li><a href="/">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="center">
+    <form class="form-horizontal" style="width: 80%;">
+      {{#product}}
+        <div class="form-group" style="display: none;">
+          <label for="fname" class="col-sm-2 control-label">name</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="id"
+              placeholder=""
+              value="{{id}}"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="fname" class="col-sm-2 control-label">name</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              placeholder=""
+              value="{{name}}"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="quantity" class="col-sm-2 control-label">quantity</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="quantity"
+              placeholder=""
+              value="{{quantity}}"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="rating" class="col-sm-2 control-label">rating</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="rating"
+              placeholder=""
+              value="{{rating}}"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="salary" class="col-sm-2 control-label">price</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="price"
+              placeholder=""
+              value="{{price}}"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="category" class="col-sm-2 control-label">category</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="category"
+              placeholder=""
+              value="{{category}}"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="category" class="col-sm-2 control-label">createdAt</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="createdAt"
+              placeholder=""
+              value="{{createdAt}}"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label
+            for="description"
+            class="col-sm-2 control-label"
+          >description</label>
+          <div class="col-sm-10">
+            <textarea
+              type="date"
+              class="form-control"
+              id="description"
+              placeholder=""
+              required
+              cols="20"
+              rows="5"
+            >{{description}}</textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <input
+              id="Update"
+              type="submit"
+              value="Update"
+              class="btn btn-primary"
+            />
+          </div>
+        </div>
+      {{/product}}
+    </form>
+  </div>
+</html>
