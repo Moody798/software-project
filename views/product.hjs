@@ -50,7 +50,6 @@
                   id={{id}}
                   class="btn btn-danger view"
                   type="button"
-                  onclick="product()"
                 >View</button>
                 <button
                   id={{id}}

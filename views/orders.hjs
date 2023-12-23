@@ -16,9 +16,9 @@
           style="position: absolute;
     left: 130;"
         >
-          <li class="active"><a href="/dashboard">Home</a></li>
-          <li><a href="/product">Product</a></li>
-          <li><a href="/add">Add</a></li>
+          <li><a href="/dashboard">HomePage</a></li>
+          <li><a href="/cart">Cart</a></li>
+          <li class="active"><a href="/orders">Orders</a></li>
         </ul>
         <ul
           class="nav navbar-nav"
@@ -29,9 +29,25 @@
         </ul>
       </nav>
     </div>
-
-    <div class="center">
-      <h1>welcome admin {{name}}</h1>
+    <div class="container">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="text-center">ID</th>
+            <th class="text-center">ProductName</th>
+            <th class="text-center">Quantity</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          {{#orders}}
+            <tr>
+              <td class="text-center">{{id}}</td>
+              <td class="text-center">{{ProductName}}</td>
+              <td class="text-center">{{quantity}}</td>
+            </tr>
+          {{/orders}}
+        </tbody>
+      </table>
     </div>
   </body>
 </html>

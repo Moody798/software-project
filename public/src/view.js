@@ -4,14 +4,12 @@ $(document).ready(function () {
       const id = $("#id").val();
       const name = $("#name").val();
       const quantity = $("#quantity").val();
-      const rating = $("#rating").val();
       const price = $("#price").val();
       const category = $("#category").val();
       const description = $("#description").val();
       const data = {
         name,
         quantity,
-        rating,
         price,
         category,
         description,

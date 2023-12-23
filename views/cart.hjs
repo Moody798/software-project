@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/src/cart.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div>
+      <nav
+        class="navbar navbar-inverse"
+        style="padding-left:130px;position: relative;"
+      >
+        <ul
+          class="nav navbar-nav"
+          style="position: absolute;
+    left: 130;"
+        >
+          <li><a href="/dashboard">HomePage</a></li>
+          <li class="active"><a href="/cart">Cart</a></li>
+          <li><a href="/orders">Orders</a></li>
+        </ul>
+        <ul
+          class="nav navbar-nav"
+          style="position: absolute;
+    right: 130px;"
+        >
+          <li><a href="/">Logout</a></li>
+        </ul>
+      </nav>
+      <div class="container">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">Name</th>
+              <th class="text-center">Number of Items</th>
+              <th class="text-center">Price per Item</th>
+              <th class="text-center">Total</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            {{#product}}
+              <tr>
+                <td class="text-center">{{productName}}</td>
+                <td class="text-center" id="quantity"><input
+                    type="text"
+                    class="form-control"
+                    id="quantity_input"
+                    placeholder=""
+                    value="{{quantity}}"
+                    required
+                  /></td>
+                <td class="text-center">{{price}}</td>
+                <td class="text-center">{{total}}</td>
+                <td class="text-center">
+                  <button
+                    id={{cartId}}
+                    class="btn btn-primary update"
+                    type="button"
+                  >Update</button>
+                  <button
+                    id={{cartId}}
+                    class="btn btn-danger remove"
+                    type="button"
+                  >Remove</button>
+                </td>
+              </tr>
+            {{/product}}
+          </tbody>
+        </table>
+        {{#sumTotal}}
+          <div class="center">
+            <h1>Total:{{total_sum}}</h1>
+            <button id="order" class="btn btn-primary" type="button">Make an
+              Order</button>
+          </div>
+        {{/sumTotal}}
+      </div>
+    </div>
+  </body>
+</html>

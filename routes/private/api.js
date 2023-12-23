@@ -28,40 +28,6 @@ function handlePrivateBackendApi(app) {
       return res.status(400).send("Could not add product");
     }
   });
-  // app.get("/api/v1/product/view", async (req, res) => {
-  //   try {
-  //     let user = await getUser(req);
-  //     if (user.role !== "admin") {
-  //       return res.status(400).send("not an admin");
-  //     }
-  //     const products = await db.raw(`SELECT * FROM "projectSE"."Product"
-  //     WHERE "ownerId"=${user.userId} and hidden=false
-  //     ORDER BY id ASC `);
-  //     return res.status(200).send(products.rows);
-  //   } catch (e) {
-  //     console.log(e.message);
-  //     return res.status(400).send("Could not view product");
-  //   }
-  // });
-  // app.get("/api/v1/product/view/:productId", async (req, res) => {
-  //   try {
-  //     let user = await getUser(req);
-  //     if (user.role !== "admin") {
-  //       return res.status(400).send("not an admin");
-  //     }
-  //     const product = await db.raw(`SELECT * FROM "projectSE"."Product"
-  //     WHERE "id"=${req.params.productId}`);
-  //     let Count = await db.raw(`SELECT COUNT(*) FROM "projectSE"."Product"
-  //     WHERE "id"=${req.params.productId}`);
-  //     if (Count.rows[0].count < 1) {
-  //       return res.status(400).send("product not available");
-  //     }
-  //     return res.status(200).send(product.rows);
-  //   } catch (e) {
-  //     console.log(e.message);
-  //     return res.status(400).send("product not available");
-  //   }
-  // });
   app.put("/api/v1/product/edit/:productId", async (req, res) => {
     try {
       let user = await getUser(req);
@@ -82,7 +48,7 @@ function handlePrivateBackendApi(app) {
       }
       let { name,quantity,rating,price,category,description} = req.body;
       await db.raw(`update "projectSE"."Product"
-      SET name='${name}', quantity=${quantity},rating=${rating},price=${price}, category='${category}' ,description='${description}'WHERE "id"=${req.params.productId}`);
+      SET name='${name}', quantity=${quantity},price=${price}, category='${category}' ,description='${description}'WHERE "id"=${req.params.productId}`);
       return res.status(200).send("product updated successfully");
     } catch (e) {
       console.log(e.message);
@@ -119,21 +85,8 @@ function handlePrivateBackendApi(app) {
   //
   //customer
   //
-  app.get("/api/v1/product/customer/view", async (req, res) => {
-    try {
-      let user = await getUser(req);
-      if (user.role !== "customer") {
-        return res.status(400).send("not an customer");
-      }
-      const products = await db.raw(`SELECT * FROM "projectSE"."Product"
-      WHERE "hidden"=false ORDER BY id ASC `);
-      return res.status(200).send(products.rows);
-    } catch (e) {
-      console.log(e.message);
-      return res.status(400).send("Could not view product");
-    }
-  });
   app.post("/api/v1/cart/new", async (req, res) => {
+    console.log(req.body);
     try {
       let user = await getUser(req);
       let userId = user.userId;
@@ -159,29 +112,6 @@ function handlePrivateBackendApi(app) {
     } catch (e) {
       console.log(e.message);
       return res.status(400).send("Could not add product");
-    }
-  });
-  app.get("/api/v1/cart/view", async (req, res) => {
-    try {
-      let user = await getUser(req);
-      if (user.role !== "customer") {
-        return res.status(400).send("not an customer");
-      }
-      productCart =
-        await db.raw(`SELECT c.id as "cartId",c."productId" as "productId",p.name as "productName",c.quantity 
-      FROM "projectSE"."Cart" as c 
-      INNER join "projectSE"."Product" as p on c."productId"=p.id
-      where c."userId"=${user.id}
-      order BY "cartId" ASC `);
-      let Count = await db.raw(`SELECT COUNT(*) FROM "projectSE"."Cart"
-      WHERE "userId"=${user.id}`);
-      if (Count.rows[0].count < 1) {
-        return res.status(400).send("cart is empty");
-      }
-      return res.status(200).send(productCart.rows);
-    } catch (e) {
-      console.log(e.message);
-      return res.status(400).send("Could not view product");
     }
   });
   app.delete("/api/v1/cart/delete/:cartId", async (req, res) => {
