@@ -46,7 +46,7 @@ function handlePrivateBackendApi(app) {
           .status(400)
           .send("you can not edit this product as you are not the owner");
       }
-      let { name,quantity,rating,price,category,description} = req.body;
+      let { name,quantity,price,category,description} = req.body;
       await db.raw(`update "projectSE"."Product"
       SET name='${name}', quantity=${quantity},price=${price}, category='${category}' ,description='${description}'WHERE "id"=${req.params.productId}`);
       return res.status(200).send("product updated successfully");
@@ -75,6 +75,33 @@ function handlePrivateBackendApi(app) {
       }
       await db.raw(`update "projectSE"."Product"
       SET hidden=true WHERE "id"=${req.params.productId}`);
+
+      return res.status(200).send("product deleted successfully");
+    } catch (e) {
+      console.log(e.message);
+      return res.status(400).send("couldn't delete product");
+    }
+  });
+  app.put("/api/v1/product/restore/:productId", async (req, res) => {
+    try {
+      let user = await getUser(req);
+      if (user.role !== "admin") {
+        return res.status(400).send("not an admin");
+      }
+      const product = await db.raw(`SELECT * FROM "projectSE"."Product"
+      WHERE "id"=${req.params.productId}`);
+      let Count = await db.raw(`SELECT COUNT(*) FROM "projectSE"."Product"
+      WHERE "id"=${req.params.productId}`);
+      if (Count.rows[0].count < 1) {
+        return res.status(400).send("product not available");
+      }
+      if (product.rows[0].ownerId !== user.userId) {
+        return res
+          .status(400)
+          .send("you can not delete this product as you are not the owner");
+      }
+      await db.raw(`update "projectSE"."Product"
+      SET hidden=false WHERE "id"=${req.params.productId}`);
 
       return res.status(200).send("product deleted successfully");
     } catch (e) {

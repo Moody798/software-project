@@ -42,6 +42,23 @@ function handlePrivateFrontEndView(app) {
         return res.render('product',{product:products.rows});
 
     });
+    app.get('/deleted' , async (req , res) => {  
+        let products
+        try {
+            let user = await getUser(req);
+            if (user.role !== "admin") {
+              return res.status(400).send("not an admin");
+            }
+            products = await db.raw(`SELECT * FROM "projectSE"."Product"
+            WHERE "ownerId"=${user.userId} and hidden=true
+            ORDER BY id ASC `);
+          } catch (e) {
+            console.log(e.message);
+            return res.status(400).send("Could not view product");
+          }  
+        return res.render('deleted',{product:products.rows});
+
+    });
     app.get("/api/v1/product/view/:productId", async (req, res) => {
         let product
         try {

@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="/styles/style.css" />
     <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/src/product.js" type="text/javascript"></script>
+    <script src="/src/deleted.js" type="text/javascript"></script>
   </head>
   <body>
     <div>
@@ -18,9 +18,9 @@
     left: 130;"
         >
           <li><a href="/dashboard">Home</a></li>
-          <li class="active"><a href="/product">Product</a></li>
+          <li><a href="/product">Product</a></li>
           <li><a href="/add">Add</a></li>
-          <li><a href="/deleted">Deleted</a></li>
+          <li class="active"><a href="/deleted">Deleted</a></li>
         </ul>
         <ul
           class="nav navbar-nav"
@@ -49,14 +49,9 @@
               <td class="text-center">
                 <button
                   id={{id}}
-                  class="btn btn-primary view"
+                  class="btn btn-success restore"
                   type="button"
-                >View</button>
-                <button
-                  id={{id}}
-                  class="btn btn-danger delete"
-                  type="button"
-                >Delete</button>
+                >Restore</button>
               </td>
             </tr>
           {{/product}}

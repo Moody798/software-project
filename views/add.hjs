@@ -20,6 +20,7 @@
           <li><a href="/dashboard">Home</a></li>
           <li><a href="/product">Product</a></li>
           <li class="active"><a href="/add">Add</a></li>
+          <li><a href="/deleted">Deleted</a></li>
         </ul>
         <ul
           class="nav navbar-nav"
