@@ -48,7 +48,7 @@
               <td class="text-center">
                 <button
                   id={{id}}
-                  class="btn btn-danger view"
+                  class="btn btn-primary view"
                   type="button"
                 >View</button>
                 <button
