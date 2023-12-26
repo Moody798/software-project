@@ -5,6 +5,7 @@
     <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/src/deleted.js" type="text/javascript"></script>
+    <script src="https://kit.fontawesome.com/df132a5d65.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <div>
@@ -17,17 +18,17 @@
           style="position: absolute;
     left: 130;"
         >
-          <li><a href="/dashboard">Home</a></li>
-          <li><a href="/product">Product</a></li>
-          <li><a href="/add">Add</a></li>
-          <li class="active"><a href="/deleted">Deleted</a></li>
+          <li><a href="/dashboard"><i class="fa-solid fa-house"></i></a></li>
+          <li><a href="/product"><i class="fa-solid fa-box-open"></i></a></li>
+          <li><a href="/add"><i class="fa-solid fa-plus"></i></a></li>
+          <li class="active"><a href="/deleted"><i class="fa-solid fa-trash"></i></a></li>
         </ul>
         <ul
           class="nav navbar-nav"
           style="position: absolute;
     right: 130px;"
         >
-          <li><a href="/">Logout</a></li>
+          <li><a href="/"><i class="fa-solid fa-right-from-bracket"></i></a></li>
         </ul>
       </nav>
     </div>
